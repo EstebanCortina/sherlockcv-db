@@ -12,20 +12,15 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
 
     - name: List new SQL files
       id: new-sql-files
       run: |
-        # Obtener el hash del último commit en la rama main antes del push
-        prev_main_commit=$(git rev-parse origin/main)
-
-        current_main_commit=$(git rev-parse HEAD)
-
-        new_files=$(git diff --name-only --diff-filter=A ${prev_main_commit}..${current_main_commit} -- '*.sql')
-
-        if [ -n "${new_files}" ]; then
-          echo "NEW_FILES=${new_files}" >> $GITHUB_ENV
-        fi
+        # Obtener la lista de archivos SQL nuevos desde el último commit en QA
+        new_files=$(git diff --name-only origin/qa..HEAD^ -- '*.sql')
+        echo "NEW_FILES=${new_files}" >> $GITHUB_ENV
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -38,9 +33,9 @@ jobs:
         pip install mysql-connector-python
 
     - name: Run SQL scripts
-      if: steps.changed-files.outputs.files != ''
       env:
         DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASS: ${{ secrets.DB_PASS }}
         DB_NAME: ${{ secrets.DB_NAME_QA }}
