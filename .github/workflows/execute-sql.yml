@@ -13,11 +13,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Get changed SQL files
-      id: changed-files
+    - name: List new SQL files
+      id: new-sql-files
       run: |
-        changed_files=$(git diff --name-only origin/qa HEAD -- '*.sql' || echo '')
-        echo "FILES_CHANGED=${changed_files}" >> $GITHUB_ENV
+        # Obtener el hash del último commit en la rama main antes del push
+        prev_main_commit=$(git rev-parse origin/main)
+
+        current_main_commit=$(git rev-parse HEAD)
+
+        new_files=$(git diff --name-only --diff-filter=A ${prev_main_commit}..${current_main_commit} -- '*.sql')
+
+        if [ -n "${new_files}" ]; then
+          echo "NEW_FILES=${new_files}" >> $GITHUB_ENV
+        fi
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -37,5 +45,9 @@ jobs:
         DB_PASS: ${{ secrets.DB_PASS }}
         DB_NAME: ${{ secrets.DB_NAME_QA }}
       run: |
-        echo "${{ steps.changed-files.outputs.files }}" > changed_files.txt
-        python execute_sql_scripts.py changed_files.txt
+        if [ -n "${{ env.NEW_FILES }}" ]; then
+          echo "${{ env.NEW_FILES }}" > new_files.txt
+          python execute_sql_scripts.py new_files.txt
+        else
+          echo "No new SQL files found."
+        fi
