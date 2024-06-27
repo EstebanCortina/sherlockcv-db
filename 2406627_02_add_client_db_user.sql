@@ -6,5 +6,3 @@ SET @grant_query = CONCAT('GRANT SELECT ON ', @current_db, '.* TO \'client\'@\'%
 PREPARE stmt FROM @grant_query;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
-
-FLUSH PRIVILEGES;
