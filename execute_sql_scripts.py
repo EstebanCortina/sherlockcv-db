@@ -4,12 +4,14 @@ import sys
 
 # Configurar la conexión a la base de datos
 db_host = os.getenv('DB_HOST')
+db_port = os.getenv('DB_PORT')
 db_user = os.getenv('DB_USER')
 db_pass = os.getenv('DB_PASS')
 db_name = os.getenv('DB_NAME')
 
 conn = mysql.connector.connect(
     host=db_host,
+    port=db_port,
     user=db_user,
     password=db_pass,
     database=db_name
