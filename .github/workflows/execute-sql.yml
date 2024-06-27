@@ -38,5 +38,5 @@ jobs:
         DB_PASS: ${{ secrets.DB_PASS }}
         DB_NAME: ${{ secrets.DB_NAME_QA }}
       run: |
-        echo "${{ steps.changed-files.outputs.files }}" > changed_files.txt
+        echo "${{ env.FILES_CHANGED }}" > changed_files.txt
         python execute_sql_scripts.py changed_files.txt
