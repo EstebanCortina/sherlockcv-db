@@ -16,8 +16,8 @@ jobs:
     - name: List new SQL files
       id: new-sql-files
       run: |
-        # Obtener el hash del último commit en la rama main antes del push
-        prev_main_commit=$(git rev-parse origin/main)
+        # Obtener el hash del último commit en la rama qa antes del push
+        prev_main_commit=$(git rev-parse origin/qa)
 
         current_main_commit=$(git rev-parse HEAD)
 
