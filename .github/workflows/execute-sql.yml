@@ -16,7 +16,7 @@ jobs:
     - name: Get changed SQL files
       id: changed-files
       run: |
-        echo "::set-output name=files::$(git diff --name-only HEAD^ HEAD | grep '.sql' || echo '')"
+        echo "name=files::$(git diff --name-only HEAD^ HEAD | grep '.sql' || echo '')" >> $GITHUB_OUTPUT
 
     - name: Set up Python
       uses: actions/setup-python@v4
