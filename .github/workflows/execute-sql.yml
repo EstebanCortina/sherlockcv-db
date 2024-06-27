@@ -16,13 +16,11 @@ jobs:
     - name: List new SQL files
       id: new-sql-files
       run: |
-        # Obtener el hash del último commit en la rama main antes del push
-        prev_main_commit=$(git rev-parse origin/main)
+        git fetch origin qa
+        # Obtener la lista de archivos SQL nuevos desde el último commit en QA
+        new_files=$(git diff --name-only origin/qa..HEAD -- '*.sql')
 
-        current_main_commit=$(git rev-parse HEAD)
-
-        new_files=$(git diff --name-only --diff-filter=A ${prev_main_commit}..${current_main_commit} -- '*.sql')
-
+        # Si hay archivos nuevos, establecer variable de entorno
         if [ -n "${new_files}" ]; then
           echo "NEW_FILES=${new_files}" >> $GITHUB_ENV
         fi
@@ -38,7 +36,6 @@ jobs:
         pip install mysql-connector-python
 
     - name: Run SQL scripts
-      if: steps.changed-files.outputs.files != ''
       env:
         DB_HOST: ${{ secrets.DB_HOST }}
         DB_USER: ${{ secrets.DB_USER }}
