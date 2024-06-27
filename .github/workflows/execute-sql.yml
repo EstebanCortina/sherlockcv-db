@@ -16,6 +16,7 @@ jobs:
     - name: Get changed SQL files
       id: changed-files
       run: |
+        git fetch origin qa
         changed_files=$(git diff --name-only origin/qa HEAD -- '*.sql' || echo '')
         echo "FILES_CHANGED=${changed_files}" >> $GITHUB_ENV
 
