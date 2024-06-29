@@ -40,6 +40,7 @@ try:
                             # Procesar todos los resultados, si existen
                             while cursor.nextset():
                                 pass
+                    conn.commit()
                     print(f"Ejecutando script SQL: {script_path}")
 
             except FileNotFoundError as e:
@@ -63,4 +64,3 @@ finally:
         cursor.close()
     if conn:
         conn.close()
-        conn.commit()
