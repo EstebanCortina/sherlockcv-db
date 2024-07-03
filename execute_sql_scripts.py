@@ -38,7 +38,7 @@ try:
                     #     if statement.strip():
                     #         cursor.execute(statement)
                             # Procesar todos los resultados, si existen
-                    cursor.execute(sql)
+                    cursor.execute(sql, multi=True)
                     while cursor.nextset():
                         pass
                     conn.commit()
