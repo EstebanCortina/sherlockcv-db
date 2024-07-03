@@ -33,13 +33,14 @@ try:
                 with open(script_path, 'r') as sql_file:
                     sql = sql_file.read()
                     
-                    # Ejecutar múltiples declaraciones SQL si existen
-                    for statement in sql.split(';'):
-                        if statement.strip():
-                            cursor.execute(statement)
+                    # # Ejecutar múltiples declaraciones SQL si existen
+                    # for statement in sql.split(';'):
+                    #     if statement.strip():
+                    #         cursor.execute(statement)
                             # Procesar todos los resultados, si existen
-                            while cursor.nextset():
-                                pass
+                    cursor.execute(sql)
+                    while cursor.nextset():
+                        pass
                     conn.commit()
                     print(f"Ejecutando script SQL: {script_path}")
 
