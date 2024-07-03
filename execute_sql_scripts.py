@@ -38,9 +38,7 @@ try:
                     #     if statement.strip():
                     #         cursor.execute(statement)
                             # Procesar todos los resultados, si existen
-                    cursor.execute(sql)
-                    while cursor.nextset():
-                        pass
+                    cursor.execute(sql, multi=True)
                     conn.commit()
                     print(f"Ejecutando script SQL: {script_path}")
 
