@@ -38,9 +38,10 @@ try:
                     #     if statement.strip():
                     #         cursor.execute(statement)
                             # Procesar todos los resultados, si existen
-                    cursor.execute(sql)
-                    while cursor.nextset():
-                        pass
+                    for result in cursor.execute(sql, multi=True):
+                        if result.with_rows:
+                            print(f"Result: {result.fetchall()}")  # Consume cualquier resultado
+
                     conn.commit()
                     print(f"Ejecutando script SQL: {script_path}")
 
