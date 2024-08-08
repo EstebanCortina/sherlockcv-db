@@ -1,0 +1,1 @@
+ALTER TABLE job_position MODIFY created_at datetime default(now());
